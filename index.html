@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="组件选型决策助手：使用合成数据演示需求筛选、偏好比较、未知信息分析和决策记录。">
+  <title>组件选型助手 · 最简演示版</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./"><span class="brand-mark">C</span> 组件选型助手</a>
+    <span class="version">大创项目 · 最简演示版</span>
+  </header>
+  <main>
+    <section class="intro">
+      <span class="eyebrow">COMPONENT DECISION DEMO</span>
+      <h1>把选择依据，一起留下。</h1>
+      <p>填写需求，查看候选差异，了解哪些未知信息可能影响选择。</p>
+      <div class="notice"><strong>演示数据说明</strong>：页面中的候选、版本、评分和证据编号均为合成示例，用于测试流程，不代表真实组件的能力或评测结果。</div>
+    </section>
+    <div class="workspace">
+      <aside class="panel requirements">
+        <div class="section-heading"><span class="step">01</span><h2>设置需求</h2></div>
+        <form id="requirements-form">
+          <label for="case-select">选型类别</label>
+          <select id="case-select"><option value="json">JSON 处理库</option><option value="database">数据库</option></select>
+          <label for="environment-select">必须支持的环境</label>
+          <select id="environment-select"></select>
+          <label class="check-row" for="advanced-required"><input id="advanced-required" type="checkbox" checked><span id="advanced-label"></span></label>
+          <div class="divider"></div>
+          <label for="performance-weight">偏好权重</label>
+          <div class="weight-labels"><span>性能 <strong id="performance-value">50%</strong></span><span>易用性 <strong id="ease-value">50%</strong></span></div>
+          <input id="performance-weight" type="range" min="0" max="100" step="5" value="50">
+          <p class="hint">两个权重合计 100%。拖动后自动重新比较。</p>
+          <button class="button primary" type="submit">开始比较 <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="hint bottom-note">硬约束先判断；偏好评分不能抵消必要条件失败。</p>
+      </aside>
+      <div class="results">
+        <section class="panel">
+          <div class="section-heading"><span class="step">02</span><h2>候选对照</h2></div>
+          <p class="hint">满足 / 不满足 / 尚未确认。尚未确认的候选保留为“待核实”。</p>
+          <div class="table-wrap"><table><caption class="sr-only">候选资格、评分与判断依据</caption><thead><tr><th scope="col">候选及版本</th><th scope="col">资格</th><th scope="col">偏好分</th><th scope="col">判断依据</th></tr></thead><tbody id="candidate-body"></tbody></table></div>
+        </section>
+        <section class="panel recommendation-panel">
+          <div class="section-heading"><span class="step">03</span><h2>当前建议</h2></div>
+          <div id="recommendation" aria-live="polite"></div>
+          <div class="actions"><button id="save-button" class="button primary" type="button">保存到本浏览器</button><button id="export-button" class="button secondary" type="button">导出 JSON 报告</button></div>
+          <p class="hint">历史记录保存在当前浏览器；不会自动同步到其他设备或 GitHub。</p>
+          <p id="action-message" role="status"></p>
+        </section>
+        <div class="analysis-grid">
+          <section class="panel">
+            <div class="section-heading"><span class="step">04</span><h2>偏好变化</h2></div>
+            <p class="hint">保持必要条件不变，试算五组权重。</p>
+            <div class="table-wrap"><table class="compact"><caption class="sr-only">不同性能权重下的推荐变化</caption><thead><tr><th scope="col">性能权重</th><th scope="col">已确认合格中优先</th></tr></thead><tbody id="sensitivity-body"></tbody></table></div>
+            <p class="hint">待核实候选仍可能影响结论，不能把本表当作无条件排名。</p>
+          </section>
+          <section class="panel">
+            <div class="section-heading"><span class="step">05</span><h2>未知信息分析</h2></div>
+            <div id="unknown-analysis"></div>
+          </section>
+        </div>
+        <section class="panel">
+          <div class="section-heading"><span class="step">06</span><h2>本地历史记录</h2></div>
+          <ul id="history-list" class="history-list"></ul>
+        </section>
+      </div>
+    </div>
+    <footer>GitHub Pages 静态演示 · 所有计算在浏览器内完成 · 规则版本 static-demo-1</footer>
+  </main>
+  <noscript><p class="notice">请启用浏览器 JavaScript，以使用选型比较功能。</p></noscript>
+</body>
+</html>
