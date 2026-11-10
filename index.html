@@ -7,6 +7,8 @@
   <title>组件选型助手 · 最简演示版</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./app.js" defer></script>
+  <script src="./config.js" defer></script>
+  <script src="./llm.js" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -63,13 +65,25 @@
             <div id="unknown-analysis"></div>
           </section>
         </div>
+        <section class="panel ai-panel" aria-labelledby="ai-title">
+          <div class="section-heading"><span class="step">06</span><h2 id="ai-title">DeepSeek AI 解释</h2><span class="ai-badge">需点击调用</span></div>
+          <p class="hint">让模型说明当前选择的理由、代价和待核实信息。点击后发送当前选项及补充问题；候选资料仍是演示数据。</p>
+          <label for="demo-access-code">团队访问口令</label>
+          <input id="demo-access-code" type="password" maxlength="128" autocomplete="off" spellcheck="false" placeholder="填写组长给的访问口令，不是 DeepSeek API Key">
+          <label for="ai-question">想进一步了解什么？（可选，最多 400 字）</label>
+          <textarea id="ai-question" maxlength="400" rows="3" placeholder="例如：为什么 B 的分数更高，却暂时不能确定选择 B？"></textarea>
+          <div class="actions"><button id="ai-explain-button" class="button primary" type="button">请 DeepSeek 解释当前结果</button></div>
+          <p id="ai-status" class="hint" role="status">尚未调用模型。</p>
+          <pre id="ai-answer" class="ai-answer" aria-live="polite" hidden></pre>
+          <p class="hint">AI 解释供参考；改变需求后请重新生成。此版本的本地保存和 JSON 导出仍保存规则计算结果。</p>
+        </section>
         <section class="panel">
-          <div class="section-heading"><span class="step">06</span><h2>本地历史记录</h2></div>
+          <div class="section-heading"><span class="step">07</span><h2>本地历史记录</h2></div>
           <ul id="history-list" class="history-list"></ul>
         </section>
       </div>
     </div>
-    <footer>GitHub Pages 静态演示 · 所有计算在浏览器内完成 · 规则版本 static-demo-1</footer>
+    <footer>组件选型演示 · 规则比较＋按需调用 DeepSeek · 规则版本 static-demo-1</footer>
   </main>
   <noscript><p class="notice">请启用浏览器 JavaScript，以使用选型比较功能。</p></noscript>
 </body>
