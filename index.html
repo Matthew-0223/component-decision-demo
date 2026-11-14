@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="组件选型决策助手：使用合成数据演示需求筛选、偏好比较、未知信息分析和决策记录。">
   <title>组件选型助手 · 最简演示版</title>
-  <link rel="stylesheet" href="./style.css">
-  <script src="./app.js" defer></script>
-  <script src="./config.js" defer></script>
-  <script src="./llm.js" defer></script>
+  <link rel="stylesheet" href="./style.css?v=aliyun-20261114-1">
+  <script src="./app.js?v=aliyun-20261114-1" defer></script>
+  <script src="./config.js?v=aliyun-20261114-1" defer></script>
+  <script src="./llm.js?v=aliyun-20261114-1" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -68,6 +68,8 @@
         <section class="panel ai-panel" aria-labelledby="ai-title">
           <div class="section-heading"><span class="step">06</span><h2 id="ai-title">DeepSeek AI 解释</h2><span class="ai-badge">需点击调用</span></div>
           <p class="hint">让模型说明当前选择的理由、代价和待核实信息。点击后发送当前选项及补充问题；候选资料仍是演示数据。</p>
+          <div class="actions"><button id="check-connection" class="button secondary" type="button">检查连接（不调用模型）</button></div>
+          <p id="connection-status" class="hint" role="status">尚未检查后端连接。</p>
           <label for="demo-access-code">团队访问口令</label>
           <input id="demo-access-code" type="password" maxlength="128" autocomplete="off" spellcheck="false" placeholder="填写组长给的访问口令，不是 DeepSeek API Key">
           <label for="ai-question">想进一步了解什么？（可选，最多 400 字）</label>
@@ -75,7 +77,7 @@
           <div class="actions"><button id="ai-explain-button" class="button primary" type="button">请 DeepSeek 解释当前结果</button></div>
           <p id="ai-status" class="hint" role="status">尚未调用模型。</p>
           <pre id="ai-answer" class="ai-answer" aria-live="polite" hidden></pre>
-          <p class="hint">AI 解释供参考；改变需求后请重新生成。此版本的本地保存和 JSON 导出仍保存规则计算结果。</p>
+          <p class="hint">每个口令每天最多 20 次，全站最多 100 次，北京时间零点重置；共用口令会共享额度。AI 解释供参考；改变需求后请重新生成。本地保存和 JSON 导出保存规则计算结果。</p>
         </section>
         <section class="panel">
           <div class="section-heading"><span class="step">07</span><h2>本地历史记录</h2></div>

@@ -1,4 +1,4 @@
-// Public backend address only. Never place any API key or password here.
+// Public address only; no API keys or access codes.
 window.DEEPSEEK_DEMO_CONFIG = Object.freeze({
-  apiBase: "https://component-decision-api.1101783179.workers.dev"
+  apiBase: "https://componesion-api-kdfqcfvesa.cn-hongkong.fcapp.run"
 });
