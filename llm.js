@@ -2,6 +2,26 @@
 (() => {
   const $ = id => document.getElementById(id);
   const button = $("ai-explain-button"), status = $("ai-status"), answer = $("ai-answer");
+  function backendError(response, data) {
+    const code = data.code || data.ErrorCode || data.Code || "";
+    const message = data.error || data.ErrorMessage || data.Message || "";
+    if (code === "InvalidArgument" && /Subdomain.*invalid/i.test(message)) {
+      return "[InvalidArgument] 后端域名无效。请从阿里云HTTP触发器复制完整公网地址到 config.js，域名中的字母不能自行修改。";
+    }
+    if (code === "AccessDenied" && /Assume role/i.test(message)) {
+      return "[AccessDenied] 阿里云无法使用函数角色，请检查RAM角色的信任策略及函数绑定的角色。请求尚未进入项目后端。";
+    }
+    const prefix = code ? `[${String(code).slice(0, 80)}] ` : `HTTP ${response.status}：`;
+    if (typeof data.error === "string" && data.error) return prefix + data.error;
+    return prefix + "阿里云平台拒绝了请求，请检查HTTP触发器及函数权限配置。";
+  }
+  async function readBackendJSON(response) {
+    let data;
+    try { data = await response.json(); }
+    catch { throw new Error(`后端返回HTTP ${response.status}，但内容不是JSON。请检查地址及项目后端是否已部署；示例程序也可能返回这种内容。`); }
+    if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error(`后端返回HTTP ${response.status}，但响应格式不正确。`);
+    return data;
+  }
   $("check-connection").addEventListener("click", async () => {
     const control = $("check-connection"), display = $("connection-status");
     const base = (window.DEEPSEEK_DEMO_CONFIG?.apiBase || "").trim().replace(/\/+$/, "");
@@ -10,10 +30,10 @@
     control.disabled = true; display.textContent = "正在检查连接，不会调用模型……";
     try {
       const response = await fetch(base + "/health", {credentials:"omit", cache:"no-store", redirect:"error", signal:controller.signal});
-      let data;
-      try { data = await response.json(); } catch { throw new Error("已收到服务器响应，但它仍可能是示例程序。请上传本项目后端代码。"); }
-      if (!response.ok || data.ok !== true || data.service !== "component-decision-api" || data.build !== "aliyun-python-20261114-1") {
-        throw new Error("服务器响应与本次阿里云后端版本不符，请检查部署及 config.js。");
+      const data = await readBackendJSON(response);
+      if (!response.ok) throw new Error(backendError(response, data));
+      if (data.ok !== true || data.service !== "component-decision-api" || data.build !== "aliyun-python-20261114-1") {
+        throw new Error("已收到服务器成功响应，但服务名称或版本与本项目不符，请检查部署及 config.js。");
       }
       display.textContent = `后端连接正常（${data.build}）。这只验证连接，模型配置还需点击 AI 按钮验证。`;
     } catch (error) {
@@ -58,11 +78,9 @@
         method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + accessCode },
         body: JSON.stringify({ state, question }), credentials: "omit", cache: "no-store", redirect: "error", signal: controller.signal
       });
-      let data;
-      try { data = await response.json(); }
-      catch { throw new Error(`后端返回HTTP ${response.status}，但内容不是JSON。请先点击“检查连接”确认已部署本项目代码。`); }
+      const data = await readBackendJSON(response);
       if (requestId !== generation) return;
-      if (!response.ok) throw new Error((data.code ? `[${data.code}] ` : `HTTP ${response.status}：`) + (data.error || "后端请求失败，请检查服务配置。"));
+      if (!response.ok) throw new Error(backendError(response, data));
       if (typeof data.text !== "string" || !data.text.trim()) throw new Error("模型没有返回有效解释。");
       answer.textContent = data.text; answer.hidden = false;
       status.textContent = `已收到 ${data.model || "DeepSeek"} 的解释；本日当前口令剩余 ${data.remaining?.access ?? "?"} 次，全站剩余 ${data.remaining?.global ?? "?"} 次。`;
