@@ -1,0 +1,70 @@
+{
+  "json": {
+    "title": "JSON 处理库",
+    "environments": [
+      "Java 17",
+      "Java 21"
+    ],
+    "advancedLabel": "必须支持流式解析（示例条件）",
+    "candidates": [
+      {
+        "id": "J-A",
+        "name": "JSON 库 A",
+        "version": "演示 v1.0",
+        "environments": {
+          "Java 17": true,
+          "Java 21": true
+        },
+        "advanced": true,
+        "performance": 85,
+        "ease": 60
+      },
+      {
+        "id": "J-B",
+        "name": "JSON 库 B",
+        "version": "演示 v1.0",
+        "environments": {
+          "Java 17": true,
+          "Java 21": false
+        },
+        "advanced": null,
+        "performance": 65,
+        "ease": 95
+      }
+    ]
+  },
+  "database": {
+    "title": "数据库",
+    "environments": [
+      "Linux",
+      "Windows"
+    ],
+    "advancedLabel": "必须满足指定事务条件（示例条件）",
+    "candidates": [
+      {
+        "id": "D-A",
+        "name": "数据库 A",
+        "version": "演示 v1.0",
+        "environments": {
+          "Linux": true,
+          "Windows": false
+        },
+        "advanced": true,
+        "performance": 90,
+        "ease": 55
+      },
+      {
+        "id": "D-B",
+        "name": "数据库 B",
+        "version": "演示 v1.0",
+        "environments": {
+          "Linux": true,
+          "Windows": true
+        },
+        "advanced": null,
+        "performance": 70,
+        "ease": 90
+      }
+    ]
+  }
+}
